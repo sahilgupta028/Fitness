@@ -1,13 +1,11 @@
 "use client";
 import { useState } from "react";
 import RegisterModal from "./RegisterModal";
-import LoginModal from "./LoginModal";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { SiTicktick } from "react-icons/si";
 
 export default function Banner() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
 
   const { data: session, status } = useSession();
 
@@ -17,14 +15,6 @@ export default function Banner() {
 
   const closeRegisterDialog = () => {
     setIsOpen(false);
-  };
-
-  const openLoginDialog = () => {
-    setIsLogin(true);
-  };
-
-  const closeLoginDialog = () => {
-    setIsLogin(false);
   };
 
   return (
@@ -44,12 +34,12 @@ export default function Banner() {
                 <p className="text-lg font-medium text-green-600 flex gap-1 items-center">
                 <SiTicktick className="h-8 w-8 mr-2" />  Welcome, {session?.user?.fullName || "User"}!
                 </p>
-                <button
+                {/* <button
                   onClick={() => signOut()}
                   className="bg-red-600 hover:bg-red-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Logout
-                </button>
+                </button> */}
               </>
             ) : (
               <>
@@ -59,12 +49,12 @@ export default function Banner() {
                 >
                   Get Started
                 </button>
-                <button
+                {/* <button
                   onClick={openLoginDialog}
                   className="bg-orange-600 hover:bg-orange-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Sign-in
-                </button>
+                </button> */}
               </>
             )}
           </div>
@@ -84,7 +74,7 @@ export default function Banner() {
       {isOpen && <RegisterModal closeDialog={closeRegisterDialog} />}
 
       {/* Login Dialog (Pop-up) */}
-      {isLogin && <LoginModal closeDialog={closeLoginDialog} />}
+      {/* {isLogin && <LoginModal closeDialog={closeLoginDialog} />} */}
     </section>
   );
 }
