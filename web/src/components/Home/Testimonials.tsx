@@ -3,44 +3,7 @@
 import React from "react";
 import Slider from "react-slick";
 import { FaStar } from "react-icons/fa";
-
-const testimonials = [
-  {
-    name: "John Doe",
-    image: "/john.jpg", // Replace with actual image URL
-    feedback:
-      "I’ve been using this platform for 6 months, and my fitness level has improved drastically. The personalized workout plans and expert advice have helped me stay on track and reach my goals.",
-    rating: 5,
-  },
-  {
-    name: "Jane Smith",
-    image: "/jane.jpg", // Replace with actual image URL
-    feedback:
-      "The 1-on-1 coaching and progress tracking tools are fantastic! I love how tailored everything is, making it feel like a personalized experience.",
-    rating: 5,
-  },
-  {
-    name: "Robert Johnson",
-    image: "/robert.jpg", // Replace with actual image URL
-    feedback:
-      "The community challenges have been a great motivator! I’m now more consistent with my workouts, and the support I receive from the community is invaluable.",
-    rating: 4,
-  },
-  {
-    name: "Michael Lee",
-    image: "/michael.jpg", // Replace with actual image URL
-    feedback:
-      "The platform is easy to use, and the daily workouts are just what I needed to stay in shape. The results have been amazing!",
-    rating: 5,
-  },
-  {
-    name: "Emily Davis",
-    image: "/emily.jpg", // Replace with actual image URL
-    feedback:
-      "I love the community and the challenges. It keeps me motivated and accountable, and the personalized feedback is great!",
-    rating: 5,
-  },
-];
+import { testimonials } from "@/data/testimonials";
 
 const Testimonials = () => {
     const settings = {
@@ -68,7 +31,7 @@ const Testimonials = () => {
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
-                  className="w-24 h-24 rounded-full object-cover border-4 border-indigo-500 shadow-lg mb-6"
+                  className="w-24 h-24 rounded-full object-cover border-2 border-orange-500 shadow-lg mb-6"
                 />
                 <h3 className="text-2xl font-semibold text-gray-700 mb-2 text-center">
                   {testimonial.name}
