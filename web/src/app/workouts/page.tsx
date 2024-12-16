@@ -143,7 +143,7 @@ const Page = () => {
             <img
               src={exercise.gifUrl}
               alt={exercise.name}
-              className="w-full h-48 object-cover"
+              className="w-full h-auto object-cover"
             />
             <div className="p-4">
               <h2 className="text-xl font-bold text-gray-800">{exercise.name}</h2>
