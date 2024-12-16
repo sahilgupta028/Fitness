@@ -1,69 +1,70 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateField, resetForm } from "@/store/registerSlice"; // Update path accordingly
+"use client";
+import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import { IoClose } from "react-icons/io5";
 import toast, { Toaster } from "react-hot-toast";
-import { z } from "zod";
 
 interface RegisterModalProps {
   closeDialog: () => void;
 }
 
 const RegisterModal: React.FC<RegisterModalProps> = ({ closeDialog }) => {
-  const dispatch = useDispatch();
-  const formData = useSelector((state: object) => state.register);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    height: "",
+    weight: "",
+    fitnessGoal: "",
+  });
 
   const handleInputChange = (field: string, value: string) => {
-    dispatch(updateField({ field, value }));
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log(formData);
-
-    // Validate the form data using zod schema
+  
     try {
-      console.log("Loading");
-
-      // RegisterSchema.parse(formData);
-      
-      console.log("done");
-
-      // If validation passes, make the API call
-      const response = await fetch("/api/register-user", {
+      // Call API to register the user
+      const res = await fetch("/api/register-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+  
+      const data = await res.json();
+  
+      if (!res.ok) {
+        toast.error(data.message || "Registration failed");
         return;
       }
-
-      const result = await response.json();
-      console.log(result.message);
-
-      toast.success(result.message);
-
-      dispatch(resetForm());
-      closeDialog();
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        // Handle zod validation errors
-        error.errors.forEach((err) => {
-          toast.error(err.message);
-        });
+  
+      toast.success("Registration successful! Logging you in...");
+  
+      // Automatically log the user in using NextAuth
+      const loginResult = await signIn("credentials", {
+        redirect: false,
+        email: formData.email,
+        password: formData.password,
+      });
+  
+      if (loginResult?.error) {
+        toast.error("Failed to log in after registration");
       } else {
-        console.error("An error occurred:", error);
-        alert("Failed to register. Please try again later.");
+        toast.success("Logged in successfully!");
+        closeDialog();
+        // Redirect to the profile page
+        // router.push("/profile");
       }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

@@ -1,11 +1,15 @@
 "use client";
 import { useState } from "react";
-import RegisterModal from "./RegisterModal"; // Assuming you will create the dialog component separately
+import RegisterModal from "./RegisterModal";
 import LoginModal from "./LoginModal";
+import { useSession, signOut } from "next-auth/react";
+import { SiTicktick } from "react-icons/si";
 
 export default function Banner() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+
+  const { data: session, status } = useSession();
 
   const openRegisterDialog = () => {
     setIsOpen(true);
@@ -35,18 +39,34 @@ export default function Banner() {
             Join our community and access personalized fitness plans, expert guidance, and a wide range of health resources.
           </p>
           <div className="flex items-center justify-center md:justify-start gap-4">
-          <button
-            onClick={openRegisterDialog}
-            className="bg-orange-600 hover:bg-orange-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            Get Started
-          </button>
-          <button
-            onClick={openLoginDialog}
-            className="bg-orange-600 hover:bg-orange-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            Sign-in
-          </button>
+            {status === "authenticated" ? (
+              <>
+                <p className="text-lg font-medium text-green-600 flex gap-1 items-center">
+                <SiTicktick className="h-8 w-8 mr-2" />  Welcome, {session?.user?.fullName || "User"}!
+                </p>
+                <button
+                  onClick={() => signOut()}
+                  className="bg-red-600 hover:bg-red-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={openRegisterDialog}
+                  className="bg-orange-600 hover:bg-orange-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Get Started
+                </button>
+                <button
+                  onClick={openLoginDialog}
+                  className="bg-orange-600 hover:bg-orange-500 text-white py-3 px-8 rounded-md text-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Sign-in
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -63,6 +83,7 @@ export default function Banner() {
       {/* Register Dialog (Pop-up) */}
       {isOpen && <RegisterModal closeDialog={closeRegisterDialog} />}
 
+      {/* Login Dialog (Pop-up) */}
       {isLogin && <LoginModal closeDialog={closeLoginDialog} />}
     </section>
   );

@@ -2,6 +2,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./client-layout";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Your App Name", // Replace with your app's actual title
-  description: "Your app description", // Replace with a meaningful description
+  title: "Your App Name", 
+  description: "Your app description",
 };
 
 export default function RootLayout({
@@ -30,7 +31,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <SessionProvider>
     <ClientLayout children={children} />
+    </SessionProvider>
     </body>
     </html>
   );
