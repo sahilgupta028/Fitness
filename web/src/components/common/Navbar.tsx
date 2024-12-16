@@ -27,6 +27,9 @@ export default function Navbar() {
             <Link href="/" className="text-white hover:text-orange-400 transition-all duration-300">
               Home
             </Link>
+            <Link href="/about" className="text-white hover:text-orange-400 transition-all duration-300">
+              About
+            </Link>
             <Link href="/workouts" className="text-white hover:text-orange-400 transition-all duration-300">
               Workouts
             </Link>
@@ -63,6 +66,13 @@ export default function Navbar() {
               onClick={toggleMenu}
             >
               Home
+            </Link>
+            <Link
+              href="/about"
+              className="block hover:text-orange-400 transition-all duration-300 py-2"
+              onClick={toggleMenu}
+            >
+              About
             </Link>
             <Link
               href="/workouts"
