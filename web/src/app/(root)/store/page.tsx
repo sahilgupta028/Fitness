@@ -21,7 +21,7 @@ const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { data: session, status } = useSession();
+  const { data: session} = useSession();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -104,11 +104,11 @@ const ProductsPage = () => {
 
                 <div className="flex items-center gap-3 mb-2">
                   <span className="text-green-600 font-bold text-lg">
-                    {product.currency} {product.product_price}
+                     {product.product_price}
                   </span>
                   {product.product_original_price && (
                     <span className="line-through text-gray-500 text-sm">
-                      {product.currency} {product.product_original_price}
+                       {product.product_original_price}
                     </span>
                   )}
                 </div>
