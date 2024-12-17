@@ -40,12 +40,13 @@ export default function Navbar() {
           <nav className="hidden md:flex space-x-10 text-lg font-medium">
             <Link href="/" className="text-white hover:text-orange-400 transition-all duration-300">
               Home
-            </Link>
+              </Link>
+            {status === "authenticated" && (
+              <>
             <Link href="/workouts" className="text-white hover:text-orange-400 transition-all duration-300">
               Workouts
             </Link>
-            {status === "authenticated" && (
-              <>
+              
                 <Link href="/diet-plans" className="text-white hover:text-orange-400 transition-all duration-300">
                   Diet Plans
                 </Link>
@@ -59,7 +60,7 @@ export default function Navbar() {
             </Link>
             {status === "authenticated" ? (
               <Link
-                href="/"
+                href={""}
                 className="text-white hover:text-orange-400 transition-all duration-300"
                 onClick={() => signOut()}
               >
@@ -67,7 +68,7 @@ export default function Navbar() {
               </Link>
             ) : (
               <Link
-                href="/"
+                href={""}
                 className="text-white hover:text-orange-400 transition-all duration-300"
                 onClick={openLoginDialog}
               >

@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaFilter } from "react-icons/fa";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import LoginRequired from "@/components/common/Login-required";
 
 interface Exercise {
   _id: string | null | undefined;
@@ -39,9 +43,9 @@ const Page = () => {
         setExercises(exercisesData);
         setFilteredExercises(exercisesData);
 
-        setBodyParts([...new Set(exercisesData.map((exercise) => exercise.bodyPart))]);
-        setEquipmentList([...new Set(exercisesData.map((exercise) => exercise.equipment))]);
-        setTargets([...new Set(exercisesData.map((exercise) => exercise.target))]);
+        setBodyParts([...new Set(exercisesData.map((exercise: { bodyPart: unknown; }) => exercise.bodyPart))]);
+        setEquipmentList([...new Set(exercisesData.map((exercise: { equipment: any; }) => exercise.equipment))]);
+        setTargets([...new Set(exercisesData.map((exercise: { target: any; }) => exercise.target))]);
       } catch (err: any) {
         setError(err.response?.data?.error || "Failed to fetch exercises");
       } finally {
@@ -70,6 +74,18 @@ const Page = () => {
   const closeInstructionModal = () => {
     setSelectedExercise(null);
   };
+
+  const { data: session, status } = useSession();
+  
+    if (status === "loading") {
+      return <p>Loading...</p>;
+    }
+  
+    if (!session) {
+      return (
+        <LoginRequired />
+      );
+    }
 
   if (loading) return <div className="text-center mt-10 text-gray-600">Loading...</div>;
   if (error) return <div className="text-center mt-10 text-red-600">Error: {error}</div>;
