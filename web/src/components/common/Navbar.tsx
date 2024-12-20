@@ -26,7 +26,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-gray-900 text-white w-full z-50">
+    <header className="bg-gray-900 text-white min-w-full z-50 fixed top-0">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
@@ -59,21 +59,19 @@ export default function Navbar() {
               Store
             </Link>
             {status === "authenticated" ? (
-              <Link
-                href={""}
+              <button
                 className="text-white hover:text-orange-400 transition-all duration-300"
                 onClick={() => signOut()}
               >
                 Logout
-              </Link>
+              </button>
             ) : (
-              <Link
-                href={""}
+              <button
                 className="text-white hover:text-orange-400 transition-all duration-300"
                 onClick={openLoginDialog}
               >
                 Sign-In
-              </Link>
+              </button>
             )}
           </nav>
 
@@ -100,6 +98,8 @@ export default function Navbar() {
             >
               Home
             </Link>
+            {status === "authenticated" && (
+              <>
             <Link
               href="/workouts"
               className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
@@ -107,8 +107,6 @@ export default function Navbar() {
             >
               Workouts
             </Link>
-            {status === "authenticated" && (
-              <>
                 <Link
                   href="/diet-plans"
                   className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
@@ -133,8 +131,7 @@ export default function Navbar() {
               Store
             </Link>
             {status === "authenticated" ? (
-              <Link
-                href="/"
+              <button
                 className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
                 onClick={() => {
                   signOut();
@@ -142,7 +139,7 @@ export default function Navbar() {
                 }}
               >
                 Logout
-              </Link>
+              </button>
             ) : (
               <Link
                 href="/"

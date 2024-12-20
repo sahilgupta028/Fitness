@@ -1,7 +1,19 @@
+"use client";
 import Image from 'next/image';
-import React from 'react'
+import React, { useState } from 'react'
+import LoginModal from '../Home/LoginModal';
 
 const LoginRequired = () => {
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  const openLoginDialog = () => {
+    setIsLogin(true);
+  };
+
+  const closeLoginDialog = () => {
+    setIsLogin(false);
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-white p-4">
               <div className="bg-white p-8 rounded-lg text-center max-w-md">
@@ -21,11 +33,14 @@ const LoginRequired = () => {
                   You need to log in to view this page. Please sign in to continue.
                 </p>
                 <button
-                  className="bg-orange-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-orange-500 transition duration-300"
-                >
-                  Go to Home
-                </button>
+                className="bg-orange-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-orange-500 transition duration-300"
+                onClick={openLoginDialog}
+              >
+                Go To Login
+              </button>
               </div>
+
+              {isLogin && <LoginModal closeDialog={closeLoginDialog} />}
             </div>
   )
 }

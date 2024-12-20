@@ -51,7 +51,7 @@ If you did not initiate this request, please disregard this email or contact our
 Thank you for choosing our service!
   
 Best regards,  
-College Management`,
+FitLife Management Team`,
   });
   
 

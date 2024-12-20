@@ -10,7 +10,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     <>
       <Provider store={store}>
         <Navbar />
+        <div className="pt-16">
         {children}
+        </div>
         <Footer />
       </Provider>
     </>
