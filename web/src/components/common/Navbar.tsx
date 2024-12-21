@@ -40,13 +40,12 @@ export default function Navbar() {
           <nav className="hidden md:flex space-x-10 text-lg font-medium">
             <Link href="/" className="text-white hover:text-orange-400 transition-all duration-300">
               Home
-              </Link>
+            </Link>
             {status === "authenticated" && (
               <>
-            <Link href="/workouts" className="text-white hover:text-orange-400 transition-all duration-300">
-              Workouts
-            </Link>
-              
+                <Link href="/workouts" className="text-white hover:text-orange-400 transition-all duration-300">
+                  Workouts
+                </Link>
                 <Link href="/diet-plans" className="text-white hover:text-orange-400 transition-all duration-300">
                   Diet Plans
                 </Link>
@@ -90,7 +89,7 @@ export default function Navbar() {
       {/* Mobile Navigation */}
       {isOpen && (
         <nav className="md:hidden bg-gray-900 text-white">
-          <div className="flex flex-col items-center space-y-4 py-4">
+          <div className="flex flex-col items-start space-y-4 py-4 px-4">
             <Link
               href="/"
               className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
@@ -100,13 +99,13 @@ export default function Navbar() {
             </Link>
             {status === "authenticated" && (
               <>
-            <Link
-              href="/workouts"
-              className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
-              onClick={toggleMenu}
-            >
-              Workouts
-            </Link>
+                <Link
+                  href="/workouts"
+                  className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Workouts
+                </Link>
                 <Link
                   href="/diet-plans"
                   className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
@@ -141,13 +140,15 @@ export default function Navbar() {
                 Logout
               </button>
             ) : (
-              <Link
-                href="/"
+              <button
                 className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
-                onClick={openLoginDialog}
+                onClick={() => {
+                  openLoginDialog();
+                  toggleMenu();
+                }}
               >
                 Sign-In
-              </Link>
+              </button>
             )}
           </div>
         </nav>

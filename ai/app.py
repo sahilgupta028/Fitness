@@ -4,7 +4,7 @@ import torch.optim as optim
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from fastapi import FastAPI,  Request
+from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import uvicorn
 
@@ -34,7 +34,7 @@ app = FastAPI()
 class UserInput(BaseModel):
     height: float  # User's height in meters
     weight: float  # User's weight in kg
-    goal_level: float  # Goal level (normalized value)
+    goal_level: str  # Goal level (Weight Loss, Maintenance, Muscle Gain)
 
 # Load Data (or use mock data)
 file_path = "exercise.csv"  # Update to your actual file path
@@ -117,34 +117,52 @@ with torch.no_grad():
 
 # Recommendation Function
 def recommend_exercises(user_input, num_exercises=10):
+    user_data = pd.Series(user_input)
+
+    # print(user_i)
+
+    if user_data.isnull().any():
+        raise ValueError("Invalid user input: Please provide valid height, weight, and goal level.")
+
     user_input_tensor = torch.tensor(user_input, dtype=torch.float32).unsqueeze(0)
+
+    # Convert exercise features to tensor
     all_exercises = torch.tensor(exercise_features, dtype=torch.float32)
 
     model.eval()
     with torch.no_grad():
-        # Get the scores for all exercises
-        scores = model(user_input_tensor.repeat(all_exercises.size(0), 1), all_exercises)
-        
-        # Convert scores to numpy for easier processing and filtering
-        scores = scores.squeeze().numpy()
+        scores = []
 
-        # Get indices where the scores are not NaN
-        valid_indices = ~np.isnan(scores)
+        # Loop over each exercise and generate a score based on the user input
+        for exercise_feature in all_exercises:
+            score = model(user_input_tensor, exercise_feature.unsqueeze(0)).item()
+            scores.append(score)
 
-        # Filter out NaN scores and corresponding exercise names
-        valid_scores = scores[valid_indices]
-        valid_exercises = [exercise_names[i] for i in range(len(scores)) if valid_indices[i].item()]
+        # Weight scores based on goal level
+        # goal_weights = {
+        #     "Weight Loss": 1.2,
+        #     "Maintenance": 1.0,
+        #     "Muscle Gain": 0.8
+        # }
+        goal_weight = user_input[2]
+
+        # Weight the scores
+        weighted_scores = np.array(scores) * goal_weight
+
+        valid_indices = ~np.isnan(weighted_scores)
+
+        valid_scores = weighted_scores[valid_indices]
+        valid_exercises = [exercise_names[i] for i in range(len(weighted_scores)) if valid_indices[i].item()]
 
         # Sort the scores in descending order and get the indices of the top recommendations
         sorted_indices = np.argsort(valid_scores)[::-1]
 
-    # Get the top N valid recommendations (default: 10)
-    recommendations = []
-    for i in sorted_indices[:num_exercises]:
-        # If the exercise name is not NaN, add it to recommendations
-        exercise = valid_exercises[i.item()]
-        if exercise is not np.nan and exercise is not None:
-            recommendations.append(exercise)
+        # Get the top N valid recommendations (default: 10)
+        recommendations = []
+        for i in sorted_indices[:num_exercises]:
+            exercise = valid_exercises[i.item()]
+            if exercise is not np.nan and exercise is not None:
+                recommendations.append(exercise)
 
     return recommendations
 
@@ -152,15 +170,13 @@ def recommend_exercises(user_input, num_exercises=10):
 @app.post("/recommend")
 async def get_recommendations(request: Request):
     data = await request.json()
-    print(data)
 
     user_data = [data.get('height'), data.get('weight'), data.get('goal_level')]
-    
+
     # Get recommendations based on user input
     recommendations = recommend_exercises(user_data, num_exercises=100)
-    
+
     return {"recommended_exercises": recommendations}
 
-# Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
