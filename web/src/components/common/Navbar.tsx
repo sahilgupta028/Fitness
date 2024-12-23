@@ -9,6 +9,7 @@ import LoginModal from "../Home/LoginModal";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  
   const [isLogin, setIsLogin] = useState(false);
 
   const openLoginDialog = () => {
