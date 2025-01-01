@@ -1,5 +1,16 @@
 import mongoose, { Schema } from "mongoose";
 
+// Define the Exercise sub-schema
+const ExerciseSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true }, // Exercise name
+    bodyPart: { type: String, required: true }, // Body part
+    timer: { type: Number, required: true }, // Duration in seconds
+    date: { type: String, required: true }, // Date in DD-MM-YYYY format
+  },
+  { _id: false } // Prevent MongoDB from creating a unique _id for each exercise
+);
+
 // Define the User schema
 const UserSchema: Schema = new Schema(
   {
@@ -13,6 +24,7 @@ const UserSchema: Schema = new Schema(
       enum: ["weight_loss", "muscle_gain", "maintenance"],
       required: true,
     },
+    exercises: [ExerciseSchema], // Array of exercises
   },
   { timestamps: true }
 );

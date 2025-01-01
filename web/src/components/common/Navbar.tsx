@@ -47,6 +47,9 @@ export default function Navbar() {
                 <Link href="/workouts" className="text-white hover:text-orange-400 transition-all duration-300">
                   Workouts
                 </Link>
+                <Link href="/today-exercise" className="text-white hover:text-orange-400 transition-all duration-300">
+                  Today Exercise
+                </Link>
                 <Link href="/diet-plans" className="text-white hover:text-orange-400 transition-all duration-300">
                   Diet Plans
                 </Link>
@@ -55,9 +58,11 @@ export default function Navbar() {
                 </Link>
               </>
             )}
+            { status !== "authenticated" &&
             <Link href="/store" className="text-white hover:text-orange-400 transition-all duration-300">
               Store
             </Link>
+            }
             {status === "authenticated" ? (
               <button
                 className="text-white hover:text-orange-400 transition-all duration-300"
@@ -106,6 +111,13 @@ export default function Navbar() {
                   onClick={toggleMenu}
                 >
                   Workouts
+                </Link>
+                <Link
+                  href="/today-exercise"
+                  className="block text-lg font-medium hover:text-orange-400 transition-all duration-300"
+                  onClick={toggleMenu}
+                >
+                  Today Exercise
                 </Link>
                 <Link
                   href="/diet-plans"
