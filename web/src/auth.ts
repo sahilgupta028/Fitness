@@ -37,7 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             ]
           })
 
-          console.log(user);
+          // console.log(user);
 
           if (!user) {
             console.log("No user found")
@@ -52,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             throw new Error("Password is incorrect")
           }
 
-          console.log("user found: ", user, user._id.toString())
+          // console.log("user found: ", user, user._id.toString())
 
           return user;
 
@@ -82,19 +82,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user}) {
-      console.log("Token in jwt: ", token, user)
+      // console.log("Token in jwt: ", token, user)
       if (user) {
         token.id = user._id?.toString()
         token.email = user.email || ""
         token.fullName = user.fullName || ""
 
       }
-     console.log("Token in jwt after: ", token)
+    //  console.log("Token in jwt after: ", token)
       return token
     },
     async session({ session, token }) {
 
-      console.log("Token in session: ", token)
+      // console.log("Token in session: ", token)
       if (token) {
         session.user._id = token.id?.toString()
         session.user.email = token.email || ""
@@ -102,7 +102,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
        
       }
 
-     console.log("Session: ", session);
+    //  console.log("Session: ", session);
 
      return session;
     }

@@ -10,7 +10,7 @@ export const getRedisClient = async () => {
             password: process.env.NEXT_PUBLIC_REDIS_PASSWORD,
             socket: {
                 host: process.env.NEXT_PUBLIC_REDIS_SOCKET_HOST,
-                port: 18584
+                port: 16026
             }
         });
         client.on('error', (err: any) => console.error('Redis Client Error:', err));

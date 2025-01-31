@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import { ShimmerEffect } from "@/components/workouts/Shimmer";
 import LoginRequired from "@/components/common/Login-required";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 interface Exercise {
   name: string;
@@ -19,7 +18,7 @@ interface Exercise {
   gifUrl: string;
 }
 
-const TodayExercise: React.FC = () => {
+const Exercise: React.FC = () => {
   const { data: session, status } = useSession();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,7 +29,7 @@ const TodayExercise: React.FC = () => {
       if (!session?.user?._id) return;
 
       try {
-        const response = await axios.get(`/api/get-today-exercise?id=${session.user._id}`);
+        const response = await axios.get(`/api/get-my-exercise?id=${session.user._id}`);
         setExercises(response.data.exercises || []);
       } catch (err: any) {
         setError(err.response?.data?.error || "Failed to fetch exercises.");
@@ -50,15 +49,10 @@ const TodayExercise: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white p-8">
-      <div className="rounded-lg p-6 flex flex-col justify-center items-center">
+      <div className="rounded-lg p-6">
         <h1 className="text-4xl font-extrabold text-indigo-700 text-center mb-8">
-          Today’s Exercises
+          Total Exercises
         </h1>
-        <Link href="/my-exercise">
-        <button className=" font-extrabold px-3 py-2 text-white bg-blue-500 shadow-xl hover:bg-blue-600 hover:shadow-2xl hover:scale-110 transform duration-300 rounded-3xl text-center mb-8">
-          See all Exercise
-        </button>
-        </Link>
         {exercises.length === 0 ? (
           <p className="text-center text-gray-600 text-lg">
             No exercises logged for today. Start your fitness journey now!
@@ -107,4 +101,4 @@ const TodayExercise: React.FC = () => {
   );
 };
 
-export default TodayExercise;
+export default Exercise;

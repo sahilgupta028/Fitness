@@ -11,7 +11,7 @@ import TestimonialSection from "@/components/Home/Testimonials";
 
 export default function Home() {
   return (
-    <div >
+    <div>
       <FitnessBanner />
       <Banner />
       <FeatureSection />

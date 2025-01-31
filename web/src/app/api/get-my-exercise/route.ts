@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import UserModel from "@/models/User";
 import ExerciseModel from "@/models/Excercise";
 import connectMongo from "@/lib/mongodb";
-import moment from "moment";
+// import moment from "moment";
 
 export async function GET(req: NextApiRequest) {
   await connectMongo();
@@ -30,19 +30,19 @@ export async function GET(req: NextApiRequest) {
 
     console.log(user.exercises);
 
-    const today = moment().format("DD-MM-YYYY");
+    // const today = moment().format("DD-MM-YYYY");
 
-    // Filter exercises logged today
-    const todayExercises = user.exercises.filter(
-      (exercise: any) => exercise.date == today
-    );
+    // // Filter exercises logged today
+    // const todayExercises = user.exercises.filter(
+    //   (exercise: any) => exercise.date == today
+    // );
 
-    console.log(today);
-    console.log(todayExercises);
+    // console.log(today);
+    // console.log(todayExercises);
 
     // Fetch detailed exercise data from the `Exercise` model
     const detailedExercises = await Promise.all(
-      todayExercises.map(async (exercise: { name: any; date: string; timer: number; }) => {
+      user.exercises.map(async (exercise: { name: any; date: string; timer: number; }) => {
         const details = await ExerciseModel.findOne({ name: exercise.name });
         return {
           ...details.toObject(), // Convert Mongoose document to plain object
