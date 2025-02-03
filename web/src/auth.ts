@@ -75,10 +75,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 60*60,
+    maxAge: 60*60*24,
   },
   jwt: {
-    maxAge: 60*60, 
+    maxAge: 60*60*24, 
   },
   callbacks: {
     async jwt({ token, user}) {
@@ -94,7 +94,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
 
-      // console.log("Token in session: ", token)
+      console.log("Token in session: ", token)
       if (token) {
         session.user._id = token.id?.toString()
         session.user.email = token.email || ""

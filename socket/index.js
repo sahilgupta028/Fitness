@@ -29,8 +29,9 @@ mongoose.connect(process.env.MONGODB_URL, {
 const PostSchema = new mongoose.Schema({
   title: String,
   content: String,
+  author: String,
   likes: { type: Number, default: 0 },
-  comments: [{ text: String, createdAt: { type: Date, default: Date.now } }],
+  comments: [{ text: String, author: String, createdAt: { type: Date, default: Date.now } }],
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -43,9 +44,9 @@ app.get("/posts", async (req, res) => {
 });
 
 app.post("/posts", async (req, res) => {
-  const { title, content } = req.body;
-  console.log({ title, content });
-  const newPost = new Post({ title, content });
+  const { title, content, author } = req.body;
+  console.log({ title, content, author });
+  const newPost = new Post({ title, content, author });
   await newPost.save();
   io.emit("newPost", newPost); // Real-time update
   res.status(201).json(newPost);
@@ -62,10 +63,10 @@ app.post("/posts/:id/like", async (req, res) => {
 
 app.post("/posts/:id/comment", async (req, res) => {
   const { id } = req.params;
-  const { text } = req.body;
+  const { text, author } = req.body;
   const post = await Post.findByIdAndUpdate(
     id, 
-    { $push: { comments: { text } } }, 
+    { $push: { comments: { text, author } } }, 
     { new: true }
   );
   if (!post) return res.status(404).json({ message: "Post not found" });
